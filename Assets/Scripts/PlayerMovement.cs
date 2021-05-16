@@ -16,6 +16,7 @@ public class PlayerMovement : NetworkBehaviour
     bool facingright;
     bool facingleft;
 
+    private Camera Camera;
 
     public float runSpeed = 3f;
 
@@ -24,14 +25,17 @@ public class PlayerMovement : NetworkBehaviour
         facingright = false;
         facingleft = true;
 
-        
+
         body = GetComponent<Rigidbody2D>();
+
+        
     }
+
 
     void HandleMovement()
     {
         if (isLocalPlayer)
-		{
+        {
             move = (Input.GetAxis("Horizontal") + Input.GetAxis("Vertical")) * runSpeed;
 
             animator.SetFloat("Speed", Mathf.Abs(move));
@@ -41,24 +45,29 @@ public class PlayerMovement : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.D) && facingright == false)
             {
-                transform.Rotate(new Vector3(0, 180, 0));
+                animator.SetBool("right", true);
+                animator.SetBool("left", false);
                 facingright = true;
                 facingleft = false;
             }
             if (Input.GetKeyDown(KeyCode.A) && facingleft == false)
             {
-                transform.Rotate(new Vector3(0, 180, 0));
-                facingleft = true;
+                animator.SetBool("left", true);
+                animator.SetBool("right", false); 
                 facingright = false;
+                facingleft = true;
+
             }
         }
-        
+
     }
 
+
     public void Update()
-	{
+    {
         HandleMovement();
-	}
+
+    }
 
     private void FixedUpdate()
     {
